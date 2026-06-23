@@ -1,0 +1,36 @@
+{
+  "name": "devboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^1.0.0",
+    "@prisma/client": "^5.22.0",
+    "date-fns": "^3.6.0",
+    "framer-motion": "^11.2.10",
+    "next": "16.2.9",
+    "next-auth": "^5.0.0-beta.28",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.12.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10",
+    "postcss": "^8",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
+  }
+}
