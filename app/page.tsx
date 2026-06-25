@@ -2,6 +2,19 @@ import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { signInWithGitHub } from '@/actions/auth'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import Link from 'next/link'
+
+// Deterministic bar heights for the commit chart
+const BARS = [38,72,55,90,42,65,80,30,58,95,48,70,85,35,62,78,44,88,52,73,40,66,82,50,76,60]
+
+// Heatmap: 7 levels of purple, fixed pattern
+const H_LEVELS = ['#1c1c1c','#1c1c1c','rgba(124,58,237,.18)','rgba(124,58,237,.35)','rgba(124,58,237,.55)','rgba(124,58,237,.75)','rgba(124,58,237,.95)']
+function heatColor(i: number) {
+  const seed = ((i * 1234567) ^ (i << 3)) & 0xffff
+  const lvl = seed % 7
+  return H_LEVELS[lvl]
+}
+const HEAT = Array.from({ length: 126 }, (_, i) => heatColor(i))
 
 export default async function LandingPage() {
   const session = await auth()
@@ -9,9 +22,10 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background dot-grid flex flex-col">
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-border/50 bg-background/80 backdrop-blur-md sticky top-0 z-10">
-        <span className="font-mono font-bold text-lg tracking-tight">
+
+      {/* ── Nav ────────────────────────────────────────────── */}
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-9 py-5 border-b border-border/50 bg-background/80 backdrop-blur-md">
+        <span className="font-mono font-bold text-lg tracking-tight text-text">
           Dev<span className="text-accent">Board</span>
         </span>
         <div className="flex items-center gap-2">
@@ -19,58 +33,149 @@ export default async function LandingPage() {
           <form action={signInWithGitHub}>
             <button
               type="submit"
-              className="flex items-center gap-2 px-4 py-2 text-sm font-sans text-muted hover:text-text border border-border hover:border-border/80 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm text-muted hover:text-text border border-border hover:border-border/80 rounded-lg transition-colors"
             >
-              <GitHubIcon />
+              <GitHubIcon className="w-4 h-4" />
               Sign in
             </button>
           </form>
         </div>
       </nav>
 
-      {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 text-center relative">
-        {/* Glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
+      {/* ── Main ───────────────────────────────────────────── */}
+      <main className="flex-1 relative px-14 py-18 flex flex-col">
 
-        <div className="relative z-10 max-w-3xl">
-          {/* Badge */}
-          <span className="inline-flex items-center gap-2 px-3 py-1 mb-8 text-xs font-sans text-accent bg-accent-dim border border-accent/20 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            Dashboard para desarrolladores
-          </span>
+        {/* Purple glow */}
+        <div
+          className="pointer-events-none absolute"
+          style={{
+            top: '24%', left: '34%',
+            transform: 'translate(-50%, -50%)',
+            width: 560, height: 560,
+            borderRadius: '50%',
+            background: 'rgba(124,58,237,.07)',
+            filter: 'blur(80px)',
+          }}
+        />
 
-          {/* Headline */}
-          <h1 className="font-sans font-bold text-5xl sm:text-6xl lg:text-7xl text-text leading-[1.05] tracking-tight mb-6">
-            Tu actividad de{' '}
-            <span className="text-accent">GitHub</span>,{' '}
-            <br className="hidden sm:block" />
-            visualizada.
-          </h1>
+        {/* ── 2-column hero ──────────────────────────────── */}
+        <div className="relative z-10 grid max-w-[1320px] mx-auto w-full gap-14 items-center"
+          style={{ gridTemplateColumns: '1.05fr .95fr' }}>
 
-          <p className="text-muted font-sans text-lg sm:text-xl leading-relaxed mb-10 max-w-xl mx-auto">
-            Conecta tu cuenta y obtén insights de tus contribuciones,
-            repositorios y pull requests en un solo lugar.
-          </p>
+          {/* Left — copy */}
+          <div>
+            <span className="inline-flex items-center gap-2 px-3 py-1 mb-6 text-xs text-accent bg-accent/10 border border-accent/20 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              Dashboard para desarrolladores
+            </span>
 
-          {/* CTA */}
-          <form action={signInWithGitHub}>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-3 px-7 py-3.5 bg-text text-background font-sans font-semibold text-sm rounded-xl hover:bg-text/90 transition-colors shadow-glow"
-            >
-              <GitHubIcon className="w-5 h-5" />
-              Continuar con GitHub
-            </button>
-          </form>
+            <h1 className="font-sans font-bold text-[58px] leading-[1.04] tracking-[-0.03em] text-text mb-5">
+              Tu actividad de{' '}
+              <span className="text-accent">GitHub</span>,{' '}
+              visualizada.
+            </h1>
 
-          <p className="mt-4 text-xs text-muted font-sans">
-            Solo lectura · Sin escritura en tu cuenta
-          </p>
+            <p className="text-muted text-lg leading-relaxed mb-8 max-w-[440px]">
+              Conecta tu cuenta y obtén insights de tus contribuciones,
+              repositorios y pull requests en un solo lugar.
+            </p>
+
+            <div className="flex items-center gap-3">
+              <form action={signInWithGitHub}>
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-3 px-6 py-3.5 bg-text text-background font-semibold text-sm rounded-xl hover:opacity-90 transition shadow-glow"
+                >
+                  <GitHubIcon className="w-5 h-5" />
+                  Continuar con GitHub
+                </button>
+              </form>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-5 py-3.5 bg-transparent text-muted hover:text-text text-sm font-medium border border-border rounded-xl transition"
+              >
+                Ver demo
+              </Link>
+            </div>
+
+            <p className="mt-4 text-xs text-muted">Solo lectura · Sin escritura en tu cuenta</p>
+          </div>
+
+          {/* Right — dashboard preview mock */}
+          <div
+            className="rounded-2xl overflow-hidden border border-border"
+            style={{
+              background: 'rgb(var(--color-surface))',
+              boxShadow: '0 0 40px rgba(124,58,237,.12), 0 20px 50px rgba(0,0,0,.4)',
+            }}
+          >
+            {/* Browser chrome */}
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+              <span className="ml-3 font-mono text-[11px] text-muted">devboard.app/dashboard</span>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 flex flex-col gap-3">
+
+              {/* Stat cards */}
+              <div className="grid grid-cols-3 gap-2.5">
+                {[
+                  { label: 'Commits', value: '1,284' },
+                  { label: 'Repos', value: '37' },
+                  { label: 'PRs', value: '92' },
+                ].map(({ label, value }) => (
+                  <div key={label} className="p-3 bg-surface-2 border border-border rounded-xl">
+                    <div className="text-[11px] text-muted mb-1.5">{label}</div>
+                    <div className="font-mono font-bold text-xl text-text">{value}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bar chart */}
+              <div className="p-3.5 bg-surface-2 border border-border rounded-xl">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-medium text-text">Commits · 30 días</span>
+                  <span className="font-mono text-[11px] text-accent">+18%</span>
+                </div>
+                <div className="flex items-end gap-[3px] h-16">
+                  {BARS.map((h, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 min-w-0 rounded-t-[2px]"
+                      style={{
+                        height: `${h}%`,
+                        background: 'linear-gradient(180deg,#7c3aed,rgba(124,58,237,.3))',
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Contribution heatmap */}
+              <div className="p-3.5 bg-surface-2 border border-border rounded-xl">
+                <div className="text-xs font-medium text-text mb-3">Contribuciones</div>
+                <div
+                  className="grid gap-[3px]"
+                  style={{ gridTemplateColumns: 'repeat(18, 1fr)' }}
+                >
+                  {HEAT.map((c, i) => (
+                    <div
+                      key={i}
+                      className="aspect-square rounded-[2px]"
+                      style={{ background: c }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Feature cards */}
-        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl w-full mt-24">
+        {/* ── Feature cards ──────────────────────────────── */}
+        <div className="relative z-10 grid grid-cols-3 gap-4 max-w-[1320px] mx-auto w-full mt-12">
           {[
             {
               icon: <ChartIcon />,
@@ -88,11 +193,8 @@ export default async function LandingPage() {
               desc: 'Feed de eventos recientes: pushes, PRs, issues y más.',
             },
           ].map(({ icon, title, desc }) => (
-            <div
-              key={title}
-              className="p-5 bg-surface border border-border rounded-xl text-left shadow-card"
-            >
-              <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-accent-dim text-accent mb-3">
+            <div key={title} className="p-5 bg-surface border border-border rounded-xl shadow-card">
+              <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-accent/10 text-accent mb-3">
                 {icon}
               </div>
               <h3 className="font-sans font-semibold text-sm text-text mb-1">{title}</h3>
@@ -102,8 +204,8 @@ export default async function LandingPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="text-center py-6 text-xs text-muted font-sans border-t border-border/40">
+      {/* ── Footer ─────────────────────────────────────────── */}
+      <footer className="text-center py-6 text-xs text-muted border-t border-border/40">
         DevBoard · Construido con Next.js 16, NextAuth y Recharts
       </footer>
     </div>
