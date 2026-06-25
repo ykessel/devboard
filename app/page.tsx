@@ -7,8 +7,8 @@ import Link from 'next/link'
 // Deterministic bar heights for the commit chart
 const BARS = [38,72,55,90,42,65,80,30,58,95,48,70,85,35,62,78,44,88,52,73,40,66,82,50,76,60]
 
-// Heatmap: 7 levels of purple, fixed pattern
-const H_LEVELS = ['#1c1c1c','#1c1c1c','rgba(124,58,237,.18)','rgba(124,58,237,.35)','rgba(124,58,237,.55)','rgba(124,58,237,.75)','rgba(124,58,237,.95)']
+// Heatmap: monochrome slate — minimal
+const H_LEVELS = ['#111827','#111827','rgba(148,163,184,.15)','rgba(148,163,184,.3)','rgba(148,163,184,.5)','rgba(203,213,225,.65)','rgba(226,232,240,.85)']
 function heatColor(i: number) {
   const seed = ((i * 1234567) ^ (i << 3)) & 0xffff
   const lvl = seed % 7
@@ -45,7 +45,7 @@ export default async function LandingPage() {
       {/* ── Main ───────────────────────────────────────────── */}
       <main className="flex-1 relative px-14 py-18 flex flex-col">
 
-        {/* Purple glow */}
+        {/* Cyan glow */}
         <div
           className="pointer-events-none absolute"
           style={{
@@ -53,7 +53,7 @@ export default async function LandingPage() {
             transform: 'translate(-50%, -50%)',
             width: 560, height: 560,
             borderRadius: '50%',
-            background: 'rgba(124,58,237,.07)',
+            background: 'rgba(6,182,212,.04)',
             filter: 'blur(80px)',
           }}
         />
@@ -106,7 +106,7 @@ export default async function LandingPage() {
             className="rounded-2xl overflow-hidden border border-border"
             style={{
               background: 'rgb(var(--color-surface))',
-              boxShadow: '0 0 40px rgba(124,58,237,.12), 0 20px 50px rgba(0,0,0,.4)',
+              boxShadow: '0 0 0 1px rgba(255,255,255,.04), 0 24px 60px rgba(0,0,0,.5)',
             }}
           >
             {/* Browser chrome */}
@@ -147,7 +147,7 @@ export default async function LandingPage() {
                       className="flex-1 min-w-0 rounded-t-[2px]"
                       style={{
                         height: `${h}%`,
-                        background: 'linear-gradient(180deg,#7c3aed,rgba(124,58,237,.3))',
+                        background: 'linear-gradient(180deg,rgba(203,213,225,.55),rgba(148,163,184,.1))',
                       }}
                     />
                   ))}

@@ -12,14 +12,14 @@ export function CommitChart({ data }: { data: CommitPoint[] }) {
       <AreaChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
         <defs>
           <linearGradient id="commitGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#7c3aed" stopOpacity={0.25} />
-            <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+            <stop offset="5%"  stopColor="#94a3b8" stopOpacity={0.25} />
+            <stop offset="95%" stopColor="#94a3b8" stopOpacity={0} />
           </linearGradient>
         </defs>
 
         <CartesianGrid
           strokeDasharray="3 3"
-          stroke="#252525"
+          stroke="#1e344f"
           vertical={false}
         />
 
@@ -40,27 +40,27 @@ export function CommitChart({ data }: { data: CommitPoint[] }) {
 
         <Tooltip
           contentStyle={{
-            background: '#111',
-            border: '1px solid #252525',
+            background: '#0f1729',
+            border: '1px solid #1e344f',
             borderRadius: '8px',
             fontSize: '11px',
             fontFamily: 'var(--font-inter)',
             color: '#f0f0f0',
           }}
-          itemStyle={{ color: '#7c3aed' }}
+          itemStyle={{ color: '#94a3b8' }}
           formatter={(v: number) => [`${v} commits`, '']}
           labelFormatter={(l: string) => l}
-          cursor={{ stroke: '#7c3aed', strokeWidth: 1, strokeDasharray: '4 2' }}
+          cursor={{ stroke: '#94a3b8', strokeWidth: 1, strokeDasharray: '4 2' }}
         />
 
         <Area
           type="monotone"
           dataKey="commits"
-          stroke="#7c3aed"
+          stroke="#94a3b8"
           strokeWidth={2}
           fill="url(#commitGrad)"
           dot={false}
-          activeDot={{ r: 4, fill: '#7c3aed', strokeWidth: 0 }}
+          activeDot={{ r: 4, fill: '#94a3b8', strokeWidth: 0 }}
         />
       </AreaChart>
     </ResponsiveContainer>

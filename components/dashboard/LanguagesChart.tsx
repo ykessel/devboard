@@ -6,7 +6,7 @@ import {
 } from 'recharts'
 import type { LangPoint } from '@/lib/github'
 
-const COLORS = ['#7c3aed', '#a78bfa', '#4f46e5', '#818cf8', '#c4b5fd', '#e0d9ff']
+const COLORS = ['#e2e8f0', '#94a3b8', '#64748b', '#cbd5e1', '#475569', '#334155']
 
 export function LanguagesChart({ data }: { data: LangPoint[] }) {
   if (data.length === 0) {
@@ -37,8 +37,8 @@ export function LanguagesChart({ data }: { data: LangPoint[] }) {
 
         <Tooltip
           contentStyle={{
-            background: '#1a1a1a',
-            border: '1px solid #333',
+            background: '#0f1729',
+            border: '1px solid #1e344f',
             borderRadius: '8px',
             fontSize: '11px',
             fontFamily: 'var(--font-inter)',

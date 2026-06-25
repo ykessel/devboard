@@ -5,27 +5,27 @@
 /* ── Light theme (default) ───────────────────────────── */
 :root {
   color-scheme: light;
-  --color-background: 250 250 250;
+  --color-background: 240 249 255;   /* sky-50  */
   --color-surface:    255 255 255;
-  --color-surface-2:  243 244 246;
-  --color-border:     229 231 235;
-  --color-text:       17 17 17;
-  --color-muted:      107 114 128;
-  --color-accent:     109 40 217;
-  --color-shadow:     0 0 0;
+  --color-surface-2:  224 242 254;   /* sky-100 */
+  --color-border:     186 230 253;   /* sky-200 */
+  --color-text:       8   47  73;    /* sky-950 */
+  --color-muted:      71  130 163;   /* sky-600 */
+  --color-accent:     6   182 212;   /* cyan-500 */
+  --color-shadow:     0   0   0;
 }
 
 /* ── Dark theme ──────────────────────────────────────── */
 [data-theme="dark"] {
   color-scheme: dark;
-  --color-background: 10 10 10;
-  --color-surface:    17 17 17;
-  --color-surface-2:  26 26 26;
-  --color-border:     37 37 37;
-  --color-text:       240 240 240;
-  --color-muted:      136 136 136;
-  --color-accent:     124 58 237;
-  --color-shadow:     0 0 0;
+  --color-background: 10  14  26;    /* deep navy */
+  --color-surface:    14  20  38;    /* slate-900 */
+  --color-surface-2:  19  28  52;    /* navy */
+  --color-border:     34  48  76;    /* muted border */
+  --color-text:       230 236 248;   /* ice white */
+  --color-muted:      94  112 148;   /* slate-blue */
+  --color-accent:     6   182 212;   /* cyan-500 — used sparingly */
+  --color-shadow:     0   0   0;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
